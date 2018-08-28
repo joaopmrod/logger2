@@ -48,44 +48,13 @@ gateway = PlutoGateway(channels,'localhost',1502)
 db = sqlite3.connect('mydb.db')
 
 
+cursor = db.cursor()
+
+
 for ch in channels.keys():
-    try:
-        # Get a cursor object
-        cursor = db.cursor()
-        print(ch)
-        cursor.execute(f'''
-            CREATE TABLE  {ch}(id INTEGER PRIMARY KEY, timestamp TIMESTAMP ,
-                               value FLOAT)
-        ''')
+    cursor.execute(f'''SELECT timestamp, value FROM {ch}''')
+    for row in cursor:
+        # row[0] returns the first column in the query (name), row[1] returns email column.
+        print(ch,'{0} : {1}'.format(row[0], row[1]))
 
-        db.commit()
-    except Exception:
-        pass
-
-
-while True:
-    print('.')
-
-
-    cursor = db.cursor()
-
-    now = time.time()
-
-    for ch in channels.keys():
-        value = gateway.read_ch(ch)
-        if value != channels[ch]['value']:
-            cursor.execute(f'''INSERT INTO {ch}(timestamp, value)
-                              VALUES(?,?)''', (now, value))
-            channels[ch]['value']=value
-            print(ch,value)
-
-    db.commit()
-
-    #time.sleep(1)
-
-
-#for ch in channels.keys():
-#    cursor.execute(f'''SELECT timestamp, value FROM {ch}''')
-#    for row in cursor:
-#        # row[0] returns the first column in the query (name), row[1] returns email column.
-#        print('{0} : {1}'.format(row[0], row[1]))
+db.close()
