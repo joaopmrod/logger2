@@ -53,7 +53,7 @@ for ch in channels.keys():
         # Get a cursor object
         cursor = db.cursor()
         print(ch)
-        cursor.execute(f"CREATE TABLE  "+ch+" (id INTEGER PRIMARY KEY, timestamp TIMESTAMP ,value FLOAT)")
+        cursor.execute("CREATE TABLE  "+ch+" (id INTEGER PRIMARY KEY, timestamp TIMESTAMP ,value FLOAT)")
 
         db.commit()
     except Exception:
