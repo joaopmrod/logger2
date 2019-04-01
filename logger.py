@@ -81,4 +81,5 @@ while True:
     if n ==20:
         db.commit()
         n=0
+        print('commit')
 
