@@ -42,7 +42,7 @@ with open("channels.csv", 'r') as csvfile:
 
 print(channels)
 
-gateway = PlutoGateway(channels,'localhost',502)
+gateway = PlutoGateway(channels,'192.168.1.152',502)
 
 # Creates or opens a file called mydb with a SQLite3 DB
 db = sqlite3.connect('mydb.db')
@@ -73,7 +73,7 @@ while True:
     for ch in channels.keys():
         value = gateway.read_ch(ch)
         if value != channels[ch]['value']:
-            cursor.execute("INSERT INTO" +ch+"(timestamp, value) VALUES(?,?)", (now, value))
+            cursor.execute("INSERT INTO " +ch+"(timestamp, value) VALUES(?,?)", (now, value))
             channels[ch]['value']=value
             #print(ch,value)
 
