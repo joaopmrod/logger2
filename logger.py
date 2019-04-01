@@ -42,7 +42,7 @@ with open("channels.csv", 'r') as csvfile:
 
 print(channels)
 
-gateway = PlutoGateway(channels,'localhost',1502)
+gateway = PlutoGateway(channels,'localhost',502)
 
 # Creates or opens a file called mydb with a SQLite3 DB
 db = sqlite3.connect('mydb.db')
@@ -62,12 +62,14 @@ for ch in channels.keys():
     except Exception:
         pass
 
+cursor = db.cursor()
+n=0
 
 while True:
     print('.')
 
 
-    cursor = db.cursor()
+
 
     now = time.time()
 
@@ -77,15 +79,10 @@ while True:
             cursor.execute(f'''INSERT INTO {ch}(timestamp, value)
                               VALUES(?,?)''', (now, value))
             channels[ch]['value']=value
-            print(ch,value)
+            #print(ch,value)
 
-    db.commit()
+    n+=1
+    if n ==20:
+        db.commit()
+        n=0
 
-    #time.sleep(1)
-
-
-#for ch in channels.keys():
-#    cursor.execute(f'''SELECT timestamp, value FROM {ch}''')
-#    for row in cursor:
-#        # row[0] returns the first column in the query (name), row[1] returns email column.
-#        print('{0} : {1}'.format(row[0], row[1]))
