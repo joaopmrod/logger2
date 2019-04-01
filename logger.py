@@ -53,7 +53,7 @@ for ch in channels.keys():
         # Get a cursor object
         cursor = db.cursor()
         print(ch)
-        cursor.execute(f"CREATE TABLE  {ch}(id INTEGER PRIMARY KEY, timestamp TIMESTAMP ,value FLOAT)")
+        cursor.execute(f"CREATE TABLE  "+ch+" (id INTEGER PRIMARY KEY, timestamp TIMESTAMP ,value FLOAT)")
 
         db.commit()
     except Exception:
@@ -73,7 +73,7 @@ while True:
     for ch in channels.keys():
         value = gateway.read_ch(ch)
         if value != channels[ch]['value']:
-            cursor.execute(f'''INSERT INTO {ch}(timestamp, value) VALUES(?,?)''', (now, value))
+            cursor.execute("INSERT INTO" +ch+"(timestamp, value) VALUES(?,?)", (now, value))
             channels[ch]['value']=value
             #print(ch,value)
 
